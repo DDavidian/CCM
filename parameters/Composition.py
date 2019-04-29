@@ -6,40 +6,25 @@ Created on Tue Apr  2 23:09:14 2019
 """
 import numpy as np
 
-class WasteStream(object):
+class WasteComposition(object):
     def __init__(self,):
-        self.BAU = {
-                "Residual":                {"Garbage": 22,  "Comingled": 0,  "GO":     0.0,  "FO":     0.0},
-                "FO":                      {"Garbage": 35,  "Comingled": 1,  "GO":     0.2}, "FO":     0.0},
-                "GO":                      {"Garbage": 1,   "Comingled": 0,  "GO":     91.0},"FO":     0.0},
-                "Other organic":           {"Garbage": 24,  "Comingled": 0,  "GO":     3.0}, "FO":     0.0},
-                "Paper/Cardboard":         {"Garbage": 5,   "Comingled": 37, "GO":     0.0}, "FO":     0.0},
-                "Plastic":                 {"Garbage": 9,   "Comingled": 8,  "GO":     0.0}, "FO":     0.0},
-                "Glass":                   {"Garbage": 0,   "Comingled": 43, "GO":     0.0}, "FO":     0.0},
-                "Metal":                   {"Garbage": 1,   "Comingled": 2,  "GO":     0.0}, "FO":     0.0},
-                "Contamination":           {"Garbage": 4,   "Comingled": 10, "GO":     5.8}, "FO":     0.0},
-                }
+        self.Waste_Composition = {
+                "Garbage":   {"Residual": 22., "FO": 35., "GO": 1., "Other_Organic": 24.,"Paper/Cardboard": 5., "Plastic": 9., "Glass": 0.,"Metal": 1.,"Other": 4.},
+                "Comingled": {"Residual": 0., "FO": 1., "GO": 0., "Other_Organic": 0.,"Paper/Cardboard": 37., "Plastic": 8., "Glass": 43.,"Metal": 2.,"Other": 10.},
+                "GO":        {"Residual": 0., "FO": 0.2, "GO": 91., "Other_Organic": 3.,"Paper/Cardboard": 0., "Plastic": 0., "Glass": 0.,"Metal": 0.,"Other": 5.8},
+                "FO":        {"Residual": 100., "FO": 0., "GO": 0., "Other_Organic": 0.,"Paper/Cardboard": 0., "Plastic": 0., "Glass": 0.,"Metal": 0.,"Other": 0.},
+                                }
         self.Generation = {"Generation (kg/hh/week)": {"Garbage": 15.78, "Comingled": 6.52, "GO": 3.21},
                 }
         return
-    
-class Composition(WasteStream):    
-    def __init__(self, WS):
-        self.WS = WS
-        return
     def verification(self):
-        self.Garbage = [self.WS.BAU[kk]["Garbage"] for kk in self.WS.BAU.keys()]
-        self.Comingled = [self.WS.BAU[kk]["Comingled"] for kk in self.WS.BAU.keys()]
-        self.GO = [self.WS.BAU[kk]["GO"] for kk in self.WS.BAU.keys()]
-        
-        self.testGarbage = np.sum(self.Garbage) #== 100
-        self.testComingled = np.sum(self.Comingled) == 100
-        self.testGO = np.sum(self.GO) == 100
+        for wc in self.Waste_Composition:
+            total = [self.Waste_Composition[wc][typetype] for typetype in self.Waste_Composition[wc]]
+            test = np.sum(total) #== 100
+            print("test ", wc, " sum=100", test)
         return
 
 ####################################################################################################################################
 if __name__== '__main__':
-    TT = WasteStream()
-    Compo = Composition(TT)
-    Compo.verification()
-    print("testGarbage= ", Compo.testGarbage, "testComingled= ", Compo.testComingled, "testGO=", Compo.testGO)
+    TT = WasteComposition()
+    TT.verification()
