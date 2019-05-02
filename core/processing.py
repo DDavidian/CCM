@@ -5,46 +5,64 @@ Created on Sun Apr 28 17:39:13 2019
 @author: Dee Davidian
 """
 try:
-    from ..parameters import Waste_Facility as WF
+    from ..parameters import waste_facility as WF
     from ..parameters import Composition as Co
     from ..parameters import Ngers as Ng
 except:
     import sys
     sys.path.append("../parameters")
-    import Waste_Facility as WF
+    import waste_facility as WF
     import Composition as Co
     import Ngers as Ng
     
 class Processing(object):
 
-    def __init__(self,Processing_Facility, Total_tonnes_processed,gate_fee, Waste_Composition):
-        self.Processing_Facility = WF.Processing_Facility
-        self.Waste_stream = 0
-        self.Total_processed_tonnes = Total_processed_tonnes
-        self.Processing_Facility_class = WF.Facility_Type()
-        self.waste_composition_class = Co.Composition(WasteStream)()
-        self.Processing_Emissions_class = Ng.processing_emissions()
-        self.tCO2 = self.emissions * self.Waste_Composition
+    def __init__(self, Facility_Name, waste_composition_class, Material_Diversion_class):
+        self.Facility_Name = Facility_Name
+        
         self.gate_fee= 0
+        #grab composition
+        self.waste_composition_class = waste_composition_class
+        #grab mat diversion per facility
+        self.Material_Diversion_class = Material_Diversion_class
+        self.mat_diversion = self.Material_Diversion_class.Material_Diversion
         return
 ##############################################################
+    def Material_Recovery(self, facility_type):
+        
+        residuals = 0.
+        processed = 0.
+        for wc, mattype in self.waste_composition_class.Waste_Composition.items():
+            for mt, Waste_Composition in mattype.items(): 
+                total_processed_per_type = self.waste_composition_class.Total_Tonnes_Received[wc] * Waste_Composition
+                percent_processed = self.mat_diversion[facility_type][mt] * 0.01
+                percent_not_processed = 1.- percent_processed
+                
+                residuals = residuals + total_processed_per_type * percent_not_processed
+                processed = processed + total_processed_per_type * percent_processed
+        self.total_for_landfill = residuals
+        self.total_processed = processed
+        return
+
+##############################################################
     def total_emissions(self,):
-        self.total_emissions = self.tCO2_per_tonne * total_processed_tonnes
+        
+        self.total_emissions= self.tonnes_recovered * (WF.Facility_Type_class.Processing_Method ["Indirect_upstream_emissions"]+WF.Facility_Type_class.Processing_Method ["Direct_process_emissions"])
         return
     def costs(self,):
-        self.gate_fee= self.Processing_Facility_class.Facility_Gate_Fee["GateFee($/tn"]
-        self.total_processed_tonnes= Total_processed_tonnes
+        self.total_costs= self.Total_Tonnes_Received * self.gate_fee
         print ("total processing cost=",self.gate_fee * total_processed_tonnes )
 ################################################################################################################
 if __name__ == "__main__":
-    Processing_Facility = WF.Processing_Facility()
-    for Processing_Facility in WF.Facility_Type:
-        Processing_Method = "MRF"
-        GateFee = 95
         Material_Diversion = "MRF"
-        Processing_Facility = "Manly_The Universe"
+        Facility_Name = "Veolia"
+        
+        #grab composition
+        waste_composition_class = Co.Waste_Composition()
+        #grab mat diversion per facility
+        Material_Diversion_class = WF.Facility_Type()
 
-        WP = Processing(Processing_Facility, Total_tonnes_processed,gate_fee, Waste_Composition)
-        WP.total_emissions()
-        WP.costs()
-        print ("total emissions in t CO2 = ", WP.total_emissions, " total processing cost = ", WP.costs)
+        facility_type = "WTE"
+        WP = Processing(Facility_Name, waste_composition_class, Material_Diversion_class)
+        WP.Material_Recovery(facility_type)
+        print ("total landfill in t = ", WP.total_for_landfill, " total processed = ", WP.total_processed)

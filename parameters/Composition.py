@@ -6,16 +6,18 @@ Created on Tue Apr  2 23:09:14 2019
 """
 import numpy as np
 
-class WasteComposition(object):
+class Waste_Composition(object):
     def __init__(self,):
         self.Waste_Composition = {
-                "Garbage":   {"Residual": 22., "FO": 35., "GO": 1., "Other_Organic": 24.,"Paper/Cardboard": 5., "Plastic": 9., "Glass": 0.,"Metal": 1.,"Other": 4.},
-                "Comingled": {"Residual": 0., "FO": 1., "GO": 0., "Other_Organic": 0.,"Paper/Cardboard": 37., "Plastic": 8., "Glass": 43.,"Metal": 2.,"Other": 10.},
-                "GO":        {"Residual": 0., "FO": 0.2, "GO": 91., "Other_Organic": 3.,"Paper/Cardboard": 0., "Plastic": 0., "Glass": 0.,"Metal": 0.,"Other": 5.8},
-                "FO":        {"Residual": 100., "FO": 0., "GO": 0., "Other_Organic": 0.,"Paper/Cardboard": 0., "Plastic": 0., "Glass": 0.,"Metal": 0.,"Other": 0.},
+                   "Garbage":                     { "Residual": 22.,  "FO": 35.,  "GO": 1.,  "Other_Organic": 23.,  "Paper/Cardboard": 5.,  "Plastic": 9., "Glass": 0 , "Metal": 1.,"Other": 4.},
+                   "Comingled":                   { "Residual": 0.,   "FO": 1.,   "GO": 0.,  "Other_Organic": 0.,   "Paper/Cardboard": 36., "Plastic": 8., "Glass": 43, "Metal": 2.,"Other": 10.},
+                   "GO":                          { "Residual": 0.,   "FO": 0.2,  "GO": 91., "Other_Organic": 3.,   "Paper/Cardboard": 0.,  "Plastic": 0., "Glass": 0., "Metal": 0.,"Other": 5.8},
+                   "FOGO":                        { "Residual": 100., "FO": 0.,   "GO": 0.,  "Other_Organic": 0.,   "Paper/Cardboard": 0.,  "Plastic": 0., "Glass": 0., "Metal": 0.,"Other": 0.},
                                 }
-        self.Generation = {"Generation (kg/hh/week)": {"Garbage": 15.78, "Comingled": 6.52, "GO": 3.21},
-                }
+        self.Generation = {
+                  "Generation (kg/hh/week)": {"Garbage": 15.78, "Comingled": 6.52, "GO": 3.21},
+                          }
+        self.Total_Tonnes_Received = {"Garbage" : 175., "Comingled" : 100 , "GO" : 100 , "FOGO" : 100}
         return
     def verification(self):
         for wc in self.Waste_Composition:
@@ -26,5 +28,5 @@ class WasteComposition(object):
 
 ####################################################################################################################################
 if __name__== '__main__':
-    TT = WasteComposition()
+    TT = Waste_Composition()
     TT.verification()
