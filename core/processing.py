@@ -46,9 +46,9 @@ class Processing(object):
 
 ##############################################################
     def total_emissions(self,):
-        
         self.total_emissions= self.tonnes_recovered * (WF.Facility_Type_class.Processing_Method ["Indirect_upstream_emissions"]+WF.Facility_Type_class.Processing_Method ["Direct_process_emissions"])
         return
+
     def costs(self,):
         self.total_costs= self.Total_Tonnes_Received * self.gate_fee
         print ("total processing cost=",self.gate_fee * total_processed_tonnes )

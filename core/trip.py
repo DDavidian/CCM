@@ -49,6 +49,7 @@ class Trip(object):
     def costs(self,):
         costperlift = self.truck_class.collection_trucks[self.truck_type]["$/lift"]
         self.lift_costs = self.number_hhold * self.Number_bin_per_hhold * costperlift
+        
 ################################################################################################################
 if __name__ == "__main__":
     Trucks = TR.trucks()
